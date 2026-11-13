@@ -8,5 +8,5 @@ POST {{Api_HostAddress}}/api/extraction/orders
 Content-Type: application/json
 
 {
-  "emailText": "Добрый день! Прошу отгрузить 10 коробок бумаги A4 до пятницы. ООО Ромашка."
+  "emailText": "Добрий день! Прошу відвантажити 10 коробок паперу A4 до пʼятниці. ТОВ «Сонячний Папір»."
 }

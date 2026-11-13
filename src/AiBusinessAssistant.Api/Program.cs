@@ -6,7 +6,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 
-// Модули монолита регистрируются здесь, каждый в своём методе-расширении.
+// Monolith modules are registered here, each with its own extension method.
 builder.Services.AddExtractionModule(builder.Configuration);
 
 var app = builder.Build();
@@ -23,5 +23,5 @@ app.MapExtractionEndpoints();
 
 app.Run();
 
-// Нужен для WebApplicationFactory в интеграционных тестах.
+// Required by WebApplicationFactory in integration tests.
 public partial class Program;
