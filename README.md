@@ -12,11 +12,11 @@ The project grows step by step: each stage adds one AI feature to the same appli
 |---|---|
 | Backend | ASP.NET Core Web API (.NET 10), Minimal API |
 | LLM | Microsoft.Extensions.AI, OpenAI .NET SDK |
-| Data | EF Core, PostgreSQL + pgvector |
+| Data | EF Core, PostgreSQL + pgvector (managed: Neon or Supabase) |
 | Frontend | React, TypeScript, Vite |
 | Agents and integrations | Microsoft Agent Framework, MCP C# SDK |
-| Quality | xUnit, Testcontainers, Microsoft.Extensions.AI.Evaluation, OpenTelemetry |
-| Infrastructure | Docker, GitHub Actions, Google Cloud Run |
+| Quality | xUnit, Microsoft.Extensions.AI.Evaluation, OpenTelemetry |
+| Infrastructure | GitHub Actions, Docker image built in CI, Google Cloud Run |
 
 ## Architecture
 
@@ -33,6 +33,17 @@ tests/
 
 The React client will live in `web/` from stage 2.
 
+```mermaid
+flowchart LR
+    user([User]) --> web["React + Vite<br/>web/"]
+    web -->|HTTP / SSE| api["ASP.NET Core API<br/>modular monolith"]
+    api -->|IChatClient| llm[(LLM provider)]
+    api -->|EF Core| db[("PostgreSQL + pgvector<br/>Neon / Supabase")]
+    mcp([MCP client]) -->|Streamable HTTP| api
+```
+
+The diagram shows the target architecture; parts are added stage by stage.
+
 ## Roadmap
 
 - [ ] **1. AI Extractor**: the API takes a customer email, calls the LLM and returns a validated order DTO (Structured Outputs).
@@ -47,7 +58,7 @@ All demo data (companies, clients, documents) is fictional.
 
 ## Run locally
 
-You need the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
+You need the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0). Docker is not needed locally: the database is a managed PostgreSQL with pgvector (Neon or Supabase), and the Docker image is built only in CI for deployment.
 
 ```bash
 dotnet build
@@ -64,9 +75,17 @@ API keys are **never committed**. Use user-secrets locally and environment varia
 ```bash
 dotnet user-secrets --project src/AiBusinessAssistant.Api set "OpenAI:ApiKey" "<your-key>"
 dotnet user-secrets --project src/AiBusinessAssistant.Api set "OpenAI:Model" "<model-name>"
+dotnet user-secrets --project src/AiBusinessAssistant.Api set "ConnectionStrings:Default" "<postgres-connection-string>"
 ```
 
-Environment variables: `OpenAI__ApiKey`, `OpenAI__Model`.
+Environment variables: `OpenAI__ApiKey`, `OpenAI__Model`, `ConnectionStrings__Default`.
+
+## Portfolio checklist
+
+- [ ] Live demo link
+- [ ] GIF of the main flows in this README
+- [x] Architecture diagram (Mermaid)
+- [x] Green CI
 
 ## Decisions
 
