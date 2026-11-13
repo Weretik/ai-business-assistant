@@ -1,14 +1,14 @@
 namespace AiBusinessAssistant.Api.Modules.Extraction;
 
 /// <summary>
-/// Этап 1. AI Extractor: письмо клиента -> LLM -> валидированный DTO заказа.
-/// Реализация появится по ходу модуля 1 курса.
+/// Stage 1. AI Extractor: customer email -> LLM -> validated order DTO.
+/// Not implemented yet.
 /// </summary>
 public static class ExtractionModule
 {
     public static IServiceCollection AddExtractionModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // TODO (М1): зарегистрировать клиента LLM и сервис извлечения.
+        // TODO (stage 1): register the LLM client and the extraction service.
         return services;
     }
 
@@ -16,10 +16,10 @@ public static class ExtractionModule
     {
         var group = app.MapGroup("/api/extraction").WithTags("Extraction");
 
-        // TODO (М1): POST /api/extraction/orders — принять текст письма, вернуть OrderDto.
+        // TODO (stage 1): POST /api/extraction/orders - take the email text, return an OrderDto.
         group.MapPost("/orders", () => TypedResults.Problem(
                 title: "Not implemented yet",
-                detail: "AI Extractor будет реализован в рамках модуля 1.",
+                detail: "The AI Extractor will be implemented in stage 1.",
                 statusCode: StatusCodes.Status501NotImplemented))
             .WithName("ExtractOrder");
 
